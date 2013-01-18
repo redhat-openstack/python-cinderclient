@@ -95,6 +95,13 @@ class Volume(base.Resource):
         """
         return self.manager.terminate_connection(self, connector)
 
+    def force_delete(self):
+        """
+        Delete the specififed volume ignoring it's current state.
+
+        :param volume: The UUID of the volume to force-delete.
+        """
+        self.manager.force_delete(self)
 
 class VolumeManager(base.ManagerWithFind):
     """
@@ -284,3 +291,6 @@ class VolumeManager(base.ManagerWithFind):
         """
         self._action('os-terminate_connection', volume,
                      {'connector': connector})
+
+    def force_delete(self, volume):
+        return self._action('os-force_delete', base.getid(volume))
